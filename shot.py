@@ -10,6 +10,7 @@ class Shot(CircleShape):
         self.velocity = ""
         self.rotation = 0
         self.velocity = velocity
+        
 
     def draw(self,screen):
         pygame.draw.circle(surface=screen,
@@ -17,6 +18,7 @@ class Shot(CircleShape):
                            width=2,
                            center=(self.position),
                            radius=self.radius)
+        
         return super().draw(screen)
 
 

@@ -3,12 +3,17 @@ from constants import *
 from shot import Shot
 import pygame
 
+
+
 class Player(CircleShape):
+    
     def __init__(self,x,y,radius):
         super().__init__(x,y,radius)
         self.rotation = 0
         self.x = x
         self.y = y
+        self.timer = 0
+
 
     def triangle(self):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
@@ -31,6 +36,7 @@ class Player(CircleShape):
     
     def update(self, dt):
         keys = pygame.key.get_pressed()
+        self.timer -= dt
 
         if keys[pygame.K_a]:
             self.rotate(dt)
@@ -44,18 +50,23 @@ class Player(CircleShape):
         if keys[pygame.K_s]:
             self.move(-dt)
         if keys[pygame.K_SPACE]:
-            self.shoot()
-    
+            if self.timer > 0:
+                pass
+            else:    
+                self.shoot()
+                SHOT_SFX = pygame.mixer.Sound("shot.mp3")
+                pygame.mixer.Sound.play(SHOT_SFX)
+                self.timer = PLAYER_SHOOT_COOLDOWN
 
     def move(self,dt):
         forward = pygame.Vector2(0, 1).rotate(self.rotation)
         self.position += forward * PLAYER_SPEED * dt 
 
     def shoot(self):
-        print("piu piu")
-        print(self.position)
         velocity = pygame.Vector2(0, 1).rotate(self.rotation)
         Shot(self.position[0],
              self.position[1],
              radius=SHOT_RADIUS,
              velocity=velocity)
+
+
